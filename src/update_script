@@ -12,7 +12,7 @@ elif [ "$1" = "HM-RASPBERRYMATIC" ] || [ "$1" = "CCU3" ]; then
   mount /usr/local
 fi  
 
-ADDON_NAME=jp-hb-devices-addon
+ADDON_NAME=hb-hs-devices-addon
 RC_DIR=/usr/local/etc/config/rc.d
 WWW_DIR=/usr/local/etc/config/addons/www/$ADDON_NAME
 ADDON_DIR=/usr/local/addons/$ADDON_NAME

@@ -1,0 +1,2 @@
+WEATHER|ADDRESS ${stringTableWeatherAddress$JAVA_DEVICE_NAME}
+

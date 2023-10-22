@@ -1,0 +1,19 @@
+// C:\D\Dev_uP\HomeMatic\homeBrew\JP-HB-Devices-addon\patchsource\www\webui\webui.js
+
+StatusDisplayDialog = Class.create({
+ 
+  initialize: function(title, content, value, callback, contentType) {
+    var _this_ = this;
+...
+
+  // Converts a comma separated string of hex values to a ASCII string
+   _convertHexString2PlainText: function(sHexString) {
+    var arHexValues = sHexString.split(","),
+    tmpStr,str = "";
+    for(var loop = 0; loop < (arHexValues.length); loop++) {
+      tmpStr = arHexValues[loop].slice(2,4);
+      str += String.fromCharCode(parseInt(tmpStr, 16));
+    }
+    return str;
+  },
+

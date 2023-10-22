@@ -1,0 +1,7 @@
+https://code.visualstudio.com/docs/remote/wsl
+
+cd /mnt/c/D/Dev_uP/HomeMatic/homeBrew/tm_SmartHome/HB-HS-Devices-AddOn/CCU_RM
+
+https://stackoverflow.com/questions/71103966/wsl-vscode-command-returning-error-not-found
+
+export PATH=$PATH:"/mnt/c/Program Files/Microsoft VS Code/bin/"
