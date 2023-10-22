@@ -30,7 +30,7 @@ _Bitte etwas Geduld haben - je nach Geschwindigkeit der SD Karte kann die Instal
 
 |  | Name | Beschreibung | 🔋Batterie-/<br/>⚡️Netzbetrieb |
 |--------|--------|--------|:--------:|
-|<img src="src/addon/www/config/img/devices/50/hb-hs-sen-temp-ds18b20_thumb.png" width=25/> | HB-HS-Sen-TEMP-DS18B20 | 1..8fach DS18B20 Temperatursensor mit optional LCD-Display | ⚡️ / 🔋 | 
+|<img src="src/addon/www/config/img/devices/50/hb-hs-sen-temp-ds18b20_thumb.png" width=25/> | HB-**HS**-Sen-TEMP-DS18B20 | 1..8fach DS18B20 Temperatursensor<br>mit optional einem LCD-Display<br>Eine Variante von [HB-**UNI**-Sen-TEMP-DS18B20](https://github.com/jp112sdl/HB-UNI-Sen-TEMP-DS18B20) | ⚡️ / 🔋 | 
 
 **Hinweis für Entwickler** _(verwendete Device Model meiner bzw. fremd-eingebundener HB-Geräte)_ **:**
 
