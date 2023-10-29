@@ -1,8 +1,11 @@
 #!/bin/tclsh
 
+# set checkURL    "https://raw.githubusercontent.com/TomMajor/SmartHome/master/HB-TM-Devices-AddOn/CCU_RM/src/addon/VERSION"
 # "https://raw.githubusercontent.com/schmidhorst/HB-HS-Devices-AddOn/raw/master/src/addon/VERSION"
 set checkURL    "https://github.com/schmidhorst/HB-HS-Devices-AddOn/raw/master/src/addon/VERSION"
+  set downloadURL "https://github.com/jp112sdl/JP-HB-Devices-addon/releases/latest"
 set downloadURL "https://github.com/schmidhorst/HB-HS-Devices-AddOn/releases/latest"
+# set downloadURL "https://github.com/TomMajor/SmartHome/raw/master/HB-TM-Devices-AddOn/CCU_RM/hb-tm-devices-addon.tgz"
 
 catch {
   set input $env(QUERY_STRING)

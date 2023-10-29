@@ -1,0 +1,4 @@
+siehe z.B. 
+C:\D\Dev_uP\HomeMatic\homeBrew\JP-HB-Devices-addon\src\addon\www\config\easymodes\SERVO\localization\de
+
+C:\D\Dev_uP\HomeMatic\homeBrew\JP-HB-Devices-addon\src\addon\www\config\easymodes\HB-UNI-Sen-CURRENT_dev_master.tcl

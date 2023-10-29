@@ -1,6 +1,6 @@
 https://code.visualstudio.com/docs/remote/wsl
 
-cd /mnt/c/D/Dev_uP/HomeMatic/homeBrew/tm_SmartHome/HB-HS-Devices-AddOn/CCU_RM
+cd /mnt/c/D/Dev_uP/HomeMatic/homeBrew/HB-HS-Devices-AddOn/
 
 https://stackoverflow.com/questions/71103966/wsl-vscode-command-returning-error-not-found
 

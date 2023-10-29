@@ -1,6 +1,14 @@
 #!/bin/sh
 #COPYFILE_DISABLE=1; export COPYFILE_DISABLE
-ADDON_NAME=hb-hs-devices-addon
+ADDON_NAME=hb-hs-devices
+# echo "pwd= $(pwd -P)"
+if [ "$BASH_SOURCE" != "" ];then # WSL: bash_source n.a.
+  SCRIPTPATHscripts="$( cd -- "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 ; /bin/pwd -P )" # WSL: Bad substitution
+else
+  # echo "dirname 0 = $(dirname "$0")"
+  SCRIPTPATHscripts="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; /bin/pwd -P )"
+fi
+cd $SCRIPTPATHscripts
 
 # file=./patchsource/www/rega/esp/functions.fn
 # diff -u --label=${file}.orig --label=${file} ${file}.orig ${file} > ./src/addon/patch/common/`basename ${file}`.patch
@@ -30,6 +38,7 @@ ADDON_NAME=hb-hs-devices-addon
 
 rm ${ADDON_NAME}-addon.tgz
 cd src
+echo "$(ls -l)"
 chmod 755 update_script
 chmod 755 addon/install_*
 chmod 755 addon/uninstall_*
@@ -39,6 +48,7 @@ chmod 755 rc.d/*
 #find . -name ".DS_Store" -exec rm -rf {} \;
 #find . -name "._*" -exec rm -rf {} \;
 #dot_clean .
-tar --exclude='untitled.txt' -zcf ../${ADDON_NAME}-addon.tgz * 
-echo "tar created."
+echo "starting tar ..."
+tar --exclude='untitled.txt' --exclude='*.lnk' -zcf ../${ADDON_NAME}-addon.tgz * 
+echo "  .. tar created."
 cd ..
