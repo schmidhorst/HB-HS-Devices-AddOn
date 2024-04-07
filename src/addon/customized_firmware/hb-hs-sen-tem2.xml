@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <device version="2" rx_modes="CONFIG,WAKEUP,LAZY_CONFIG" cyclic_timeout="1200">
   <supported_types>
-    <type name="HB-HS-Sen-TEMP-DS18B20" id="HB-HS-Sen-TEMP-DS18B20" updatable="true">
+    <type name="HB-HS-Sen-TEM2-DS18B20" id="HB-HS-Sen-TEM2-DS18B20" updatable="true">
       <parameter index="9.0" size="1.0" cond_op="GE" const_value="01" />
-      <parameter index="10.0" size="2.0" const_value="0xF580" />
+      <parameter index="10.0" size="2.0" const_value="0xF581" />
     </type>
   </supported_types>
-  <paramset type="MASTER" id="HB-HS-Sen-TEMP-DS18B20dev_master">
+  <paramset type="MASTER" id="HB-HS-Sen-TEM2-DS18B20dev_master">
     <parameter id="LOW_BAT_LIMIT">
       <logical type="float" min="1.8" max="3.3" default="2.2" unit="V" />
       <physical type="integer" interface="config" list="0" index="18" size="1" />
@@ -27,7 +27,7 @@
   </paramset>
   <channels>
     <channel index="0" type="MAINTENANCE" ui_flags="internal" class="maintenance" count="1">
-      <paramset type="MASTER" id="maint_ch_master"></paramset>
+      <paramset type="MASTER" id="maint_ch_master" />
       <paramset type="VALUES" id="maint_ch_values">
         <parameter id="UNREACH" operations="read,event" ui_flags="service">
           <logical type="boolean" />
@@ -65,22 +65,23 @@
         </parameter>
       </paramset>
     </channel>
-    <channel index="1" type="WEATHER" autoregister="true" count_from_sysinfo="23.0">
+    <channel autoregister="true" index="1" type="WEATHER" count_from_sysinfo="23.0">
       <link_roles>
         <source name="WEATHER_TH" />
       </link_roles>
-      <paramset type="MASTER" id="HB-HS-Sen-TEMP-DS18B20_master">
+      <paramset type="MASTER" id="HB-HS-Sen-TEM2-DS18B20_master">
         <parameter id="TEMPERATURE_OFFSET">
           <logical type="float" min="-5.0" max="5.0" unit="K" default="0" />
           <physical type="integer" signed="true" interface="config" list="1" index="1" size="1" />
           <conversion type="float_integer_scale" factor="10" />
+          <conversion type="sint4_sintx" physical_bytes="1"/>
         </parameter>
         <parameter id="ADDRESS">
           <logical type="string" unit="HEX" />
           <physical type="string" interface="config_string" list="1" index="2" size="8" />
         </parameter>
       </paramset>
-      <paramset type="VALUES" id="HB-HS-Sen-TEMP-DS18B20_values">
+      <paramset type="VALUES" id="HB-HS-Sen-TEM2-DS18B20_values">
         <parameter id="TEMPERATURE" operations="read,event">
           <logical type="float" min="-150.0" max="150.0" unit="°C" />
           <physical type="integer" interface="command" value_id="TEMPERATURE" no_init="true">
@@ -92,7 +93,7 @@
           </description>
         </parameter>
       </paramset>
-      <paramset type="LINK" id="HB-UNI-Sen-TEMP-DS18B20_link"></paramset>
+      <paramset type="LINK" id="HB-UNI-Sen-TEM2-DS18B20_link"></paramset>
     </channel>
   </channels>
   <frames>
@@ -123,7 +124,17 @@
     <frame id="MEASURE_EV_BAT" direction="from_device" event="true" type="0x53" fixed_channel="*">
       <parameter type="integer" index="9.7" size="0.1" param="LOWBAT" />
     </frame>
+    <frame id="RFID_TEXT_EVENT" direction="from_device" event="true" type="0x53" channel_field="9">
+      <parameter type="string" index="35" size="16" param="RFID_CHIPID" />
+    </frame>
   </frames>
-  <paramset_defs></paramset_defs>
+  <paramset_defs>
+      <parameter id="RFID_CHIPID" operations="read,event" control="RFID.CHIPID">
+        <logical type="string"/>
+        <physical type="string" interface="command" value_id="RFID_CHIPID">
+           <event frame="RFID_TEXT_EVENT"/>
+        </physical>
+      </parameter>
+  </paramset_defs>
 </device>
 
