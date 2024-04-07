@@ -10,15 +10,25 @@ DEVICE_IMG=hb-hs-sen-temp-ds18b20.png
 DEVICE_THUMB=hb-hs-sen-temp-ds18b20_thumb.png
 FIRMWARE_FILE=/firmware/rftypes/hb-hs-sen-temp.xml
 
+# all output of this script is catched and send also to GLOBAL_LOGFILE in hb-hs-devices-addon, so no " | tee -a "$GLOBAL_LOGFILE" " required!!
+# if [ -z "$GLOBAL_LOGFILE" ];then
+#   # shellcheck disable=SC2164
+#   SCRIPTPATHTHIS="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+#   GLOBAL_LOGFILE=$SCRIPTPATHTHIS/log/inst.log
+# fi
+
+echo "$0 is now patching now files in /www/config/ folder ..." # | tee -a "$GLOBAL_LOGFILE"
 #------------------------------------------------------------------------------
 # Edit DEVDB.tcl
 devdescrFile="/www/config/devdescr/DEVDB.tcl"
 devdescrSearch="array[[:space:]]*set[[:space:]]*DEV_PATHS[[:space:]]*{"
-
 devdescrInsert="$DEVICE {{50 \/config\/img\/devices\/50\/$DEVICE_THUMB} {250 \/config\/img\/devices\/250\/$DEVICE_IMG}} "
 
-if [ -z "`cat $devdescrFile | grep \"$DEVICE\"`" ]; then
+if ! grep -q "$DEVICE" $devdescrFile; then # if not found the grep-Result $? is 1 as Returncode
 	sed -i "s/\($devdescrSearch\)/\1$devdescrInsert/g" $devdescrFile
+  echo "to DEVDB.tcl inserted: $devdescrInsert"
+else	
+  echo "DEVDB.tcl contains already: $devdescrInsert"
 fi
 
 #------------------------------------------------------------------------------
@@ -34,6 +44,49 @@ webuiInsert="${webuiInsert}DEV_PATHS['$DEVICE'] = new Object();\n"
 webuiInsert="${webuiInsert}DEV_PATHS['$DEVICE']['50'] = '\/config\/img\/devices\/50\/$DEVICE_THUMB';\n"
 webuiInsert="${webuiInsert}DEV_PATHS['$DEVICE']['250'] = '\/config\/img\/devices\/250\/$DEVICE_IMG';"
 
-if [ -z "`cat $webuiFile | grep \"$DEVICE\"`" ]; then
+if ! grep -q "$DEVICE" $webuiFile; then # if not found the grep-Result is 1 as Returncode
 	sed -i "s/\($webuiSearch\)/\1$webuiInsert/g" $webuiFile
+  echo "to webui.js inserted: <some line>"
+else
+  echo "webui.js contains already lines for $DEVICE"
 fi
+
+#------------------------------------------------------------------------------
+# Add additional entries to stringtable_de.txt:
+stringtable_deFile="/www/config/stringtable_de.txt"
+
+stringtable_deInsert="WEATHER|Abs_Luftfeuchte\t\${stringTableWeather_AbsLuftfeuchte}"
+if ! grep -q "Abs_Luftfeuchte" $stringtable_deFile; then # Eintrag ist noch nicht vorhanden
+  printf "\n%s" $stringtable_deInsert >> $stringtable_deFile # Am Ende anfügen
+  echo "to stringtable_de.txt inserted: $stringtable_deInsert" | tee -a "$GLOBAL_LOGFILE"
+else
+  echo "stringtable_de.txt contains already: $stringtable_deInsert"
+fi
+
+echo "...patching files in /www/config/ folder done!"
+
+#------------------------------------------------------------------------------
+# Edit German translate.lang.stringtable.js
+# wg. Komma am Zeienende, aber nicht vor }, ist der letzte Eintrag immer eine Zeilen 
+#     "noMoreKeys" : ""
+# (in anderen *.js-Dateiem diese Verzeichnisses zum Teil auch "theEnd" : "
+# In translate.lang.stringtable.js ist als erster Eintrag nach { eine Zeile
+#   "dummy" : "",
+# drin.
+
+translate_deInsert="\"stringTableWeather_AbsLuftfeuchte\" : \"Abs. Luftfeuchte\","
+translate_deFile="/www/webui/js/lang/de/translate.lang.stringtable.js"
+
+# translate_deSearch="\"dummy\" : \"\"," 
+# if ! grep -q "stringTableWeather_AbsLuftfeuchte" $translate_deFile ; then
+#   sed -i "s/\($translate_deSearch\)/\1$translate_deInsert/g" $translate_deFile
+# fi
+
+translate_deSearch="\"noMoreKeys\" : \"\"" 
+if ! grep -q "stringTableWeather_AbsLuftfeuchte" $translate_deFile; then
+   sed -i "s/\($translate_deSearch\)/$translate_deInsert\n    \1/" $translate_deFile
+  echo "to $translate_deFile inserted: $translate_deInsert"
+else
+  echo "$translate_deFile contains already: $translate_deInsert"
+fi
+echo "$0 done"
