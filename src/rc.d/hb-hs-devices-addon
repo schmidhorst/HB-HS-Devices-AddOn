@@ -76,14 +76,29 @@ if [ $PATCHVERSION -eq 0 ]; then
   print "\n\n#### Failure in check_ccu_fw_version! #####" | tee -a "$GLOBAL_LOGFILE"
   quit;
   fi;
-  
+
+# logrotate
+fileSize=$(stat -c %s "$GLOBAL_LOGFILE")
+if [ -n "$DEBUG" ]; then
+  echo "Logfilesize $fileSize"
+fi
+if [ "$fileSize" -gt 10000 ]; then
+  echo "LogRotate reqired"
+  # rm -f "$GLOBAL_LOGFILE.old" # not required
+  mv -f "$GLOBAL_LOGFILE" "$GLOBAL_LOGFILE.old"
+  printf "%s\n" "Elder entries see $GLOBAL_LOGFILE.old" > "$GLOBAL_LOGFILE"
+fi
+
 case "$1" in
   ""|init|start)
     if [ ! -f "${ADDON_DIR}"/installed ] || [ ! -f ${CK_FIRMWARE_FILE} ]; then       
       printf "\n%s\n" "Starting installation V$(cat "${ADDON_DIR}"/VERSION) within '$1'" | tee -a "$GLOBAL_LOGFILE"
-      cp /dev/null "$GLOBAL_ERRFILE" # create empty file
-      truncate -s 0 "$PATCH_REVOKE_ERRFILE" # create empty file, alternative methode
-
+      if [ -f "$GLOBAL_ERRFILE" ]; then
+        cp /dev/null "$GLOBAL_ERRFILE" # make it empty
+      fi
+      if [ -f "$PATCH_REVOKE_ERRFILE" ]; then
+        truncate -s 0 "$PATCH_REVOKE_ERRFILE" # make it empty, alternative methode
+      fi
       mount -o remount,rw /
         
       #### Check if monit process exists
@@ -314,26 +329,31 @@ case "$1" in
     else
       rm -rf "$ADDON_DIR"
     fi
-    rm -rf "$WWW_DIR"
-    rm -f "${RC_DIR}/${ADDON_NAME}"
+    rm -rf "$WWW_DIR" # /etc/config/addons/www/${ADDON_NAME}
 
     sync
     mount -o remount,ro /
-    ;;
+    rm -f "${RC_DIR}/${ADDON_NAME}" # this script file itself!
+    ;; # uninstall end
   
   restart|reload)
     echo "$1: Nothing to do..." | tee -a "$GLOBAL_LOGFILE"
     # Operations to stop and start (restart) the addon
     ;;
 
-  info|info.de)
-    echo "$1: Sending some html to stdout ..." >> "$GLOBAL_LOGFILE"    
+  # Es wird info und info.de aufgerufen und das Ergebnis hinterienander im Zusatzsoftware-Dialog dargestellt
+  info)
+    echo "$1: Sending html for the description in AddOn-Dialog to stdout ..." >> "$GLOBAL_LOGFILE"
     echo "Info: <a href='https://github.com/schmidhorst/HB-HS-Devices-AddOn' target=\"_blank\"><center><b>HB-HS-Devices AddOn</b><br><img src='../addons/${ADDON_NAME}/${ADDON_NAME}.png'></center></a>"
-    echo "Info: (c) 2023...2024 Horst Schmid<br>"
-    echo "Version: $(cat "${ADDON_DIR}"/VERSION)"
+    echo "Info: <center>(c) 2023...2024 Horst Schmid</center><br>"
+    echo "Version: $(cat "${ADDON_DIR}"/VERSION)" # installierte Version
     echo "Name: ${ADDON_NAME_UPC}"
-    echo "Operations: uninstall"
-    echo "Update: /addons/${ADDON_NAME}/update-check.cgi"
+    echo "Operations: uninstall" # Button im Dialog 
+    echo "Update: /addons/${ADDON_NAME}/update-check.cgi" # ist dafür unter /usr/local/etc/config/addons/www/ ein Link notwendig?
+    ;;
+
+  info.de)
+    echo "$1: Kein zusätzliches Info in Deutsch!" >> "$GLOBAL_LOGFILE"
     ;;
 
   *)
@@ -345,7 +365,7 @@ case "$1" in
 
   esac
 res=$?
-if [ $res -ne 0 ]; then
-  echo "=== Exit from $0 with result $res ===" | tee -a "$GLOBAL_LOGFILE"
+if [ $res -ne 0 ] || [ -n "$DEBUG" ]; then
+  echo "$(date +"%Y-%m-%d %H:%M:%S") === Exit from $0 with result $res ===" | tee -a "$GLOBAL_LOGFILE"
 fi
 exit $res

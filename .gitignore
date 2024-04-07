@@ -9,3 +9,5 @@ hb-hs-devices-addon_0.10a.tgz
 /patchsource
 *.plb
 src/addon/test.sh
+test.sh
+src/addon/testLeds.sh

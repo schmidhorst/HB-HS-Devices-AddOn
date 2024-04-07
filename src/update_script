@@ -4,7 +4,6 @@ target="UNDEFINED"
 if [ "$1" != "" ]; then
   target=$1
 fi
-echo "TARGET=$target"
 
 if [ "$1" = "CCU2" ]; then
   mount -t ubifs ubi1:user /usr/local
@@ -39,7 +38,7 @@ rm -f ${ADDON_DIR}/installed
 # shellcheck disable=SC2164
 SCRIPTPATHTHIS="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 GLOBAL_LOGFILE=$ADDON_DIR/log/inst.log
-echo "$(date +%Y-%m-%d) $(date +%H:%M:%S): $(basename "$0") (Path: $SCRIPTPATHTHIS) ausgeführt mit Param 1='$1'" | tee -a "$GLOBAL_LOGFILE"
+printf "\n%s\n" "$(date +%Y-%m-%d) $(date +%H:%M:%S): $(basename "$0") (Path: $SCRIPTPATHTHIS) gestartet mit Param 1 (=target)=$target" | tee -a "$GLOBAL_LOGFILE"
 sync
 
 if [ "$1" = "HM-RASPBERRYMATIC" ] || [ "$1" = "CCU3" ]; then

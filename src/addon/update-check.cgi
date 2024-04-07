@@ -1,7 +1,7 @@
 #!/bin/tclsh
 
 # "https://raw.githubusercontent.com/schmidhorst/HB-HS-Devices-AddOn/raw/master/src/addon/VERSION"
-set checkURL    "https://github.com/schmidhorst/HB-HS-Devices-AddOn/raw/master/src/addon/VERSION"
+set checkURL    "https://raw.githubusercontent.com/schmidhorst/HB-HS-Devices-AddOn/master/src/addon/VERSION"
 set downloadURL "https://github.com/schmidhorst/HB-HS-Devices-AddOn/releases/latest"
 
 catch {
