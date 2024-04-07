@@ -1,6 +1,10 @@
+Build via wsl possible, e.g. via 
+- build.sh
+- build.cmd starts wsl and executes build.sh
 https://code.visualstudio.com/docs/remote/wsl
 
-cd /mnt/c/D/Dev_uP/HomeMatic/homeBrew/HB-HS-Devices-AddOn/
+Build command in build.sh:
+  /mnt/c/D/Dev_uP/HomeMatic/homeBrew/HB-HS-Devices-AddOn/build.sh
 
 https://stackoverflow.com/questions/71103966/wsl-vscode-command-returning-error-not-found
 

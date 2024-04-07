@@ -1,0 +1,11 @@
+
+hb-hs-devices-addon-0.11_00.tgz
+hb-hs-devices-addon-addon_nichtInstallierbar.tgz
+hb-hs-devices-addon_0.10_ok.tgz
+hb-hs-devices-addon_0.11_ok.tgz
+*.lnk
+*.pptx
+hb-hs-devices-addon_0.10a.tgz
+/patchsource
+*.plb
+src/addon/test.sh
