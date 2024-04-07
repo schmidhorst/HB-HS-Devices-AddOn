@@ -14,15 +14,17 @@ DEVICE_THUMB=hb-hs-sen-temp-ds18b20_thumb.png
 devdescrFile="/www/config/devdescr/DEVDB.tcl" # Achtung: nur wenige, aber sehr lange Zeilen
 devdescrSearch="$DEVICE {{50 \/config\/img\/devices\/50\/$DEVICE_THUMB} {250 \/config\/img\/devices\/250\/$DEVICE_IMG}} "
 
-if cat $devdescrFile | grep "$DEVICE"; then
+if grep -q "$DEVICE" $devdescrFile; then
   sed -i "s/\($devdescrSearch\)//g" $devdescrFile
+  echo "Removed from $devdescrFile: $devdescrSearch"
 fi
 
 #------------------------------------------------------------------------------
 # Undo webui.js changes
 webuiFile="/www/webui/webui.js"
-if cat $webuiFile | grep "$DEVICE"; then
+if grep -q "$DEVICE" $webuiFile; then
   sed -i "/\($DEVICE\)/d" $webuiFile
+  echo "Removed from $webuiFile: $DEVICE"
 fi
 
 #------------------------------------------------------------------------------
@@ -34,3 +36,4 @@ fi
 # remove image files
 rm -f /www/config/img/devices/250/$DEVICE_IMG
 rm -f /www/config/img/devices/50/$DEVICE_THUMB
+echo "2 files (250/$DEVICE_IMG, 50/$DEVICE_THUMB) removed from /www/config/img/devices/..."
